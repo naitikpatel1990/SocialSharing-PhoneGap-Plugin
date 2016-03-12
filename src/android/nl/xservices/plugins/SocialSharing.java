@@ -323,10 +323,17 @@ public class SocialSharing extends CordovaPlugin {
     if (image.startsWith("http") || image.startsWith("www/")) {
       String filename = getFileName(image);
       localImage = "file://" + dir + "/" + filename;
-      File media = new File(localImage);
-      Uri uri = Uri.fromFile(media);
+      ContentValues content = new ContentValues(4);
+      content.put(Video.VideoColumns.DATE_ADDED,
+      System.currentTimeMillis() / 1000);
+      content.put(Video.Media.MIME_TYPE, "video/mp4");
+      content.put(MediaStore.Video.Media.DATA, localImage);
+      ContentResolver resolver = getBaseContext().getContentResolver();
+      Uri uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, content);
+      /*File media = new File(localImage);
+      Uri uri = Uri.fromFile(media);*/
       sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-      sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+     // sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       
       if (image.startsWith("http")) {
         // filename optimisation taken from https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin/pull/56

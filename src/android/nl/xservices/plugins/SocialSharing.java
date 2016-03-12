@@ -323,7 +323,8 @@ public class SocialSharing extends CordovaPlugin {
     if (image.startsWith("http") || image.startsWith("www/")) {
       String filename = getFileName(image);
       localImage = "file://" + dir + "/" + filename;
-      sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(localImage));
+      File media = new File(localImage);
+      sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(media));
       sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       
       if (image.startsWith("http")) {
